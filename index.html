@@ -24,44 +24,47 @@
 </div>
 
 <script>
-  const tg = window.Telegram.WebApp;
-  tg.ready();
+  const tg = window.Telegram?.WebApp;
 
-  const mainDiv = document.getElementById("main");
-  const profileDiv = document.getElementById("profile");
-  const profileInfo = document.getElementById("profileInfo");
-  const profileBtn = document.getElementById("profileBtn");
-  const backBtn = document.getElementById("backBtn");
+  if (!tg) {
+    document.body.innerHTML = "<h2>Bu sayfa sadece Telegram uygulaması içinde açılabilir.</h2>";
+  } else {
+    tg.ready();
 
-  function showMain() {
-    profileDiv.style.display = "none";
-    mainDiv.style.display = "block";
-  }
+    const mainDiv = document.getElementById("main");
+    const profileDiv = document.getElementById("profile");
+    const profileInfo = document.getElementById("profileInfo");
+    const profileBtn = document.getElementById("profileBtn");
+    const backBtn = document.getElementById("backBtn");
 
-  function showProfile() {
-    mainDiv.style.display = "none";
-    profileDiv.style.display = "block";
-    // Kullanıcı bilgilerini buraya doldur
-    const user = tg.initDataUnsafe?.user || {};
-    profileInfo.textContent = `
+    function showMain() {
+      profileDiv.style.display = "none";
+      mainDiv.style.display = "block";
+    }
+
+    function showProfile() {
+      mainDiv.style.display = "none";
+      profileDiv.style.display = "block";
+      const user = tg.initDataUnsafe?.user || {};
+      profileInfo.textContent = `
 Kullanıcı Adı: @${user.username || "Yok"}
 Ad: ${user.first_name || ""}
 Soyad: ${user.last_name || ""}
-    
+
 (Not: Daha gelişmiş veri için bot ile iletişim gereklidir.)
-    `;
-  }
+      `;
+    }
 
-  profileBtn.addEventListener("click", () => {
-    showProfile();
-  });
+    profileBtn.addEventListener("click", () => {
+      showProfile();
+    });
 
-  backBtn.addEventListener("click", () => {
+    backBtn.addEventListener("click", () => {
+      showMain();
+    });
+
     showMain();
-  });
-
-  // İlk açılışta ana menüyü göster
-  showMain();
+  }
 </script>
 </body>
 </html>
