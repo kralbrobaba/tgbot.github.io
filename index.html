@@ -1,11 +1,67 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <title>MiniGame Popup</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MiniGame Popup</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 10px; }
+  #profile, #main { display: none; }
+  button { margin: 5px; padding: 10px 20px; font-size: 16px; }
+</style>
 </head>
 <body>
-  <h1>MiniGame Popup Çalışıyor!</h1>
-  <p>Bu sayfa başarıyla yüklendi.</p>
+<div id="main">
+  <h2>Ana Menü</h2>
+  <button id="profileBtn">👤 Profil</button>
+  <button id="playGameBtn">🎲 Oyna</button>
+</div>
+
+<div id="profile">
+  <h2>Profil Bilgileriniz</h2>
+  <pre id="profileInfo"></pre>
+  <button id="backBtn">⬅️ Geri</button>
+</div>
+
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+
+  const mainDiv = document.getElementById("main");
+  const profileDiv = document.getElementById("profile");
+  const profileInfo = document.getElementById("profileInfo");
+  const profileBtn = document.getElementById("profileBtn");
+  const backBtn = document.getElementById("backBtn");
+
+  function showMain() {
+    profileDiv.style.display = "none";
+    mainDiv.style.display = "block";
+  }
+
+  function showProfile() {
+    mainDiv.style.display = "none";
+    profileDiv.style.display = "block";
+    // Kullanıcı bilgilerini buraya doldur
+    const user = tg.initDataUnsafe?.user || {};
+    profileInfo.textContent = `
+Kullanıcı Adı: @${user.username || "Yok"}
+Ad: ${user.first_name || ""}
+Soyad: ${user.last_name || ""}
+    
+(Not: Daha gelişmiş veri için bot ile iletişim gereklidir.)
+    `;
+  }
+
+  profileBtn.addEventListener("click", () => {
+    showProfile();
+  });
+
+  backBtn.addEventListener("click", () => {
+    showMain();
+  });
+
+  // İlk açılışta ana menüyü göster
+  showMain();
+</script>
 </body>
 </html>
